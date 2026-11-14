@@ -1,54 +1,130 @@
-# HW2) Reproducing Serena Williams's Plot
+# HW3) R/Python Package
 
 ## About
 
-This assignment is the continuation of HW1. This time you will take the next step by implementing the "game plan" you described in the first assignment.
+This assignment is the continuation of HW1 and HW2. This time you will take the next step by creating a package (R or Python) to retrieve the career matches of a given player (e.g. Serena Williams, Rafael Nadal) from tennisabstract.com, and make a plot like the NYT's data visualization of HW2 (ignoring annotations).
 
-## Serena Williams's Career Matches
+## Main Functions
 
-As we saw in HW1, the webpage containing the career matches of Serena Williams is given below:
+Your package should have two primary functions:
 
-[https://www.tennisabstract.com/cgi-bin/wplayer-classic.cgi?p=SerenaWilliams&f=ACareerqq](https://www.tennisabstract.com/cgi-bin/wplayer-classic.cgi?p=SerenaWilliams&f=ACareerqq)
+1) Function to get the career's data of a given player
 
-> **Important:** Notice the date of birth of Serena Williams: `26-Sep-1981`
+    - Input: name of player, e.g. `"serena williams"`, or `"Serena Williams"` or `"SerenaWilliams"`
+    - Output: data frame to be used for graphing purposes (like the `serena` data frame of HW2)
+    - If the user provides an invalid name of a player (`"Gaston Sanchez"`), then it should return a meaningful error message.
 
-### Main Data File
+2) Function to make the scatter plot---like the plot you graphed in HW2 (without annotations)
 
-If you inspect the source code of the above webpage, you can find the following javascript file that has all the data (i.e. the necessary information) about Serena Williams's matches:
+For example, suppose the functions of my package are `data_function()` and `plot_function()`. BTW: give better names to your functions. Under this assumption, a user should be able to call my functions like so:
 
-[https://www.tennisabstract.com/jsmatches/SerenaWilliamsCareer.js](https://www.tennisabstract.com/jsmatches/SerenaWilliamsCareer.js)
+```r
+# Serena Williams data and plot
+serena = data_function("serena williams")
+plot_function(serena)
 
-**Example: First Match**
+# Rafael Nadal data and plot
+rafa = data_function("Rafael Nadal")
+plot_function(rafa)
 
-Let's consider the first match that took place in October 30th 1995 (see highlighted data in the image below).
+# returns a meaningful error message
+unknown_player = data_function("GastonSanchez")
+```
 
-The data of this match is the **first element in the array of the javascript file** `SerenaWilliamsCareer.js` which contains, among other fields, the following values:
+## Package Specifications
 
-* Date of match: `"19951030"`
-* Tournament: `"Canadian Open"`
-* Surface: `"Carpet"`
-* Whether Serena loses or wins: `"W", "L"` (lose) or `"W", "W"` (win)
-* Name of opponent: `"Anne Miller"`
-* Opponent's date of birth: `"19770119"`
+### Public Functions
 
-## Deliverables
+As mentioned above, your package should have two main (public) functions:
 
-For this assignment, you will have a single GitHub repository (**individual submission**). Your repository should contain the following:
+- One function to get data from tennis abstract, and process it to return a clean data frame.
+- One function that takes the cleaned-processed data frame to produce a scatter plot
 
-* One script file with code to download the raw data file (i.e. javascript file)
-* One script file (`.py` or `.R`) to clean/process the raw data in order to produce the clean data set. This is the data `serena` to be used for graphing purposes (recall that `serena` was mentioned in HW1).
-* One script file (`.py` or `.R`) in which you import the `serena` data and produce the plot, saved into an appropriate folder, e.g. `images/`, or `outputs/`, or `figures/`.
-* One notebook (`.ipynb` or `.qmd`) or markdown file (`doc.md` or `report.md`) in which you insert the image (plot) file, and a brief narrative description for this assignment.
-* An optional `ai_documentation.txt` file where you will describe the name and version of any AI tool used for this HW, as well as any prompts and output from such AI tool(s).
-* A `Makefile` that includes:
-  * `.PHONY` targets `all` and `clean`
-  * rule to generate clean data
-  * rule to generate the plot in PNG format
-  * rule to produce the report in HTML format
-  * rule to produce the report in PDF format
-  * `all` rule to get the clean data, the plot, and the HTML/PDF reports
-  * `clean` rule to remove clean data, plot, and HTML/PDF reports
+### Private Functions
 
+In addition to the public functions, you can use any number of auxiliary private functions.
 
-* Add a Conda `environment.yml`
-* A `README.md` file (at the top-level) with detailed contents about your HW assignment.
+### Function Length
+
+No function should be longer than 20 lines of code (excluding comments and empty lines)
+
+- try to limit the length of private functions to no more than 10 lines
+
+### Naming Functions
+
+Follow good practices for naming functions:
+
+- choose a consistent style: `snake_case()`, `camelCase()`, `MixedCaps()`
+- name of functions should be intuitive, clear
+- name of arguments should also be clear
+
+### Tests
+
+Because the raw data comes from a website (tennisabstract.com), we will follow the gold standard of **avoid hitting live servers entirely during automated tests**.
+
+We will focus on writing tests for functions that handle the cleaning/processing of the JS files, e.g. `SerenaWilliamsCareer.JS`
+
+> **IMPORTANT: Female vs Male players**
+>
+> Notice that Career JS files of female players are different from those of male players.
+>
+> - <https://www.tennisabstract.com/jsmatches/SerenaWilliamsCareer.js>
+> - <https://www.tennisabstract.com/jsmatches/RafaelNadalCareer.js>
+>
+> Files of female players contain the date-of-birth of the opponents, from which their age has to be derived. In contrast, files of male players already contain the age of the opponent.
+
+To write your tests, we recommend that you use the following mockup JS content.
+
+**`FemalePlayerCareer.JS`**
+```text
+# A few entries from a female player career's JS file
+var morematchmx = [["19951030", "Canadian Open", "Carpet", "W", "L", "", "", "WC", "Q1", "6-1 6-1", "3", "Anne Miller", "149", "7", "", "R", "19770119", "", "USA", "0", "", "", "", "", "", "", "1995-W-WT-CAN-02A-1995-013"],
+  ["19970307", "Indian Wells", "Hard", "W", "L", "", "", "WC", "Q1", "6-4 6-0", "3", "Alexia Dechaume Balleret", "87", "", "", "R", "19700503", "", "FRA", "0", "", "", "", "", "", "", "1997-W-WT-USA-02A-1997-006"],
+  ["19970804", "Manhattan Beach", "Hard", "W", "L", "", "", "WC", "Q3", "7-6 4-6 6-3", "3", "Magui Serna", "54", "6", "", "L", "19790301", "167", "ESP", "0", "", "", "", "", "", "", "1997-W-WT-USA-07A-1997-026"]]
+```
+
+**`MalePlayerCareer.JS`**
+```text
+# A few entries from a male player career's JS file
+var morematchmx = [["20010910", "Spain F10", "Hard", "S", "L", "", "", "WC", "R32", "2-6 7-5 6-2", "3", "Guillermo Platel", "731", "", "", "R", "22.264202601", "", "ESP", "0", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "2001-M-FU-ESP-10A-2001-002", "", "1", "1"],
+  ["20010917", "Seville CH", "Clay", "C", "L", "", "", "WC", "R16", "3-6 6-1 6-3", "3", "Stefano Galvani", "161", "2", "", "R", "24.2902121834", "178", "ITA", "0", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "2", "", "", "", "2001-784-024", "", "2", "2"],
+  ["20010917", "Seville CH", "Clay", "C", "W", "", "", "WC", "R32", "6-4 6-4", "3", "Israel Matos Gil", "751", "", "Q", "U", "18.7597535934", "", "ESP", "0", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "2001-784-015", "", "1", "1"]]
+```
+
+## Other Considerations
+
+### How we will use/test your package
+
+The *litmus test* of your hw3 submission will involve a direct installation from your github repository, and then using your 2 public functions to obtain and plot the data of a handful of players.
+
+**If you create an R package**
+
+We'll run either the `"devtools"` function `install_github()` or the `"pak"` function `pack()`
+
+```r
+# R package
+devtools::install_github("username/yourpackage")
+
+# equivalent
+pak::pak("username/yourpackage")
+```
+
+**If you create a Python package**
+
+To install a Python package directly from a GitHub repository, we'll use the `pip install` command prefixed with `git+` followed by your repository's URL.
+
+```bash
+# Python package
+pip install git+https://github.com/username/yourpackage.git
+```
+
+### Commits
+
+As usual, we will grade commit mechanics (how changes are packaged and documented) alongside workflow integrity (how git was used as a tool for reproducible research, rather than a few bulk upload commits).
+
+- Each commit should represent a coherent, single step; i.e. no massive commits.
+- Each commits should have a concise, descriptive message; i.e. no vague messages.
+
+### Makefile and Environment
+
+Because this HW involves developing and submitting a package, there is no need to include `Makefile` and `environment.yml` files.
