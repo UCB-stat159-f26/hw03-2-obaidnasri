@@ -1,0 +1,17 @@
+data/raw/
+data/processed/
+images/
+report.html
+report.pdf
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
+build/
+dist/
+.venv/

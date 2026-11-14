@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tennis-career-plot"
+version = "0.1.0"
+description = "Retrieve and visualize tennis players' career match data from Tennis Abstract"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas>=2.0",
+    "matplotlib>=3.7"
+]
+
+[tool.setuptools.packages.find]
+include = ["tennis_package*"]
