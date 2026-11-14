@@ -45,7 +45,7 @@ The original HW2 scripts and notebook are retained as references. The reusable p
 1. Install the package directly from GitHub:
 
    ```bash
-   pip install git+https://github.com/USERNAME/REPOSITORY.git
+   pip install git+https://github.com/UCB-stat159-f26/hw03-2-obaidnasri.git
    ```
 
    Replace `USERNAME/REPOSITORY` with the GitHub repository location.
